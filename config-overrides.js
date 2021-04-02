@@ -5,8 +5,8 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const rewireCssModules = require('react-app-rewire-css-modules');
 
 const ENV = {
-  DEV: 'https://api.dreamoncampus.com',
-  PROD: 'https://api.dreamoncampus.com'
+  DEV: 'https://api.xxx.com',
+  PROD: 'https://api.xxx.com'
 };
 
 const devServerConfig = () => config => {

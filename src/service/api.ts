@@ -1,8 +1,8 @@
-const API = 'https://api.dreamoncampus.com';
+const API = 'https://api.xxx.com';
 const api = process.env.NODE_ENV ==="development"?"/dapi":API;
 export default {
 
-    /**查询公益活动排行 */
+    /**接口地址 */
     getRanking: `${api}/operation/specialActivity/selectPage`
 
 };
