@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Axois from 'axios';
 import Api from '../../service/api';
+import { Button } from 'antd-mobile';
+import styles from './index.less';
 
 class RankList extends Component {
     constructor(props) {
@@ -10,16 +12,39 @@ class RankList extends Component {
     getData() {
         Axois.get(Api.getRanking, {
             params: {
-                page: 1, size: 10
+                page: this.page, size: 10
             }
         })
-        .then()
-        .catch();
+        .then(res => {
+            const data = res.data.data.records;
+            if(data.length>0) {
+                this.setState({
+                    rankData: {
+                        isfinish: false,
+                        rankList: this.state.rankData.rankList.concat(res.data.data.records)
+                    }
+                });
+            }else{
+                this.setState({
+                    rankData: {
+                        isfinish: true,
+                        rankList: this.state.rankData.rankList.concat(res.data.data.records)
+                    }
+                });
+            }
+        }).catch(() => {
+            this.setState({
+                rankData: {
+                    isfinish: true,
+                    rankList: []
+                }
+            });
+        });
     } 
 
     render() {
         return (<div>
-                <button onClick={ () => {
+                <a className='style_a' onClick={ () => {
                     this.props.history.push({
                         pathname: '/other'
                     });
@@ -36,10 +61,10 @@ class RankList extends Component {
                     //返回上级页面
                     // this.props.history.goBack();
                     }
-                }> 使用函数跳转到other页面 </button>
-                    <button onClick={this.getData.bind(this)}>
+                }> 使用函数跳转到other页面 </a>
+                    <Button onClick={this.getData.bind(this)}>
                         调用函数
-                    </button>
+                    </Button>
             </div>
         );
     }

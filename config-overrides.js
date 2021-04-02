@@ -1,11 +1,12 @@
 // 这里是我要用一些配置信息
-const {override, fixBabelImports, addPostcssPlugins, addWebpackAlias, addLessLoader,overrideDevServer } = require('customize-cra');
+const {override, fixBabelImports, addDecoratorsLegacy, addPostcssPlugins, addWebpackAlias, addLessLoader, overrideDevServer } = require('customize-cra');
 const path = require('path');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
+const rewireCssModules = require('react-app-rewire-css-modules');
 
 const ENV = {
-  DEV: 'https://api.xxx.com',
-  PROD: 'https://api.xxx.com'
+  DEV: 'https://api.dreamoncampus.com',
+  PROD: 'https://api.dreamoncampus.com'
 };
 
 const devServerConfig = () => config => {
@@ -22,7 +23,9 @@ const devServerConfig = () => config => {
   };
 };
 
-const alter_config= () => (config) => {
+const alter_config= () => (config, env) => {
+  //css模块化
+  config = rewireCssModules(config, env);
 
   const oneOf_loc= config.module.rules.findIndex(n => n.oneOf);
   config.module.rules.push({
@@ -67,7 +70,8 @@ const alter_config= () => (config) => {
               {
                   loader: require.resolve('css-loader'),
                   options: {
-                      importLoaders: 1
+                      importLoaders: 1,
+                      modules: true
                   }
               },
               {
@@ -105,7 +109,9 @@ module.exports = {
         // selectorBlackList: ['weui-']
       })]),
       //引入less编译
-      addLessLoader()
+      addLessLoader(),
+      //由于 react-app-rewire v2.0 以上版本已经移除了 getBabelLoader ，需要使用 customize-cra 库的 addBabelPlugins 方法代替
+      addDecoratorsLegacy()
   ),
   devServer: overrideDevServer(devServerConfig())
 };
